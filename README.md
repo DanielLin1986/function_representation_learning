@@ -1,1 +1,1 @@
-# representation_learning using Bi-directional LSTM.
+# Representation learning with Bi-directional LSTM.
