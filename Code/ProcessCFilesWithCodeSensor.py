@@ -2,7 +2,7 @@
 """
 Created on Mon Sep 11 15:38:30 2017
 
-This file achieve two functionalities:
+This file achieves two functionalities:
     1) Grab all the .c files from a specified directory
     2) Process all the .c files with CodeSensor and output them to a specified directory.
 
