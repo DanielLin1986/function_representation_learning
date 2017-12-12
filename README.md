@@ -23,7 +23,11 @@ The Vulnerabilities_info.xlsx file contains information of the collected functio
 
 The "Data" folder contains the source code of vulnerable functions within the Zip file of the 3 projects. After unzipping the files, one will find that the source code of each function was named with its CVE ID. 
 
-The "Code" folder contains the Python code sample for invoking the CodeSensor to parse functions to ASTs (for detail information and usage of CodeSensor, please visiter the author's blog: http://codeexploration.blogspot.com.au/) It also contains the Python code sample for implementing LSTM based on Keras with Tensorflow backend.
+The "Code" folder contains the Python code samples. 
+1) ProcessCFilesWithCodeSensor.py file is for invoking the CodeSensor to parse functions to ASTs in serialized formart (for detail information and usage of CodeSensor, please visiter the author's blog: http://codeexploration.blogspot.com.au/) 
+2) ProcessRawASTs_DFT.py file is to process the output of ProcessCFilesWithCodeSensor.py and convert the serialized ASTs to textual vectors.
+3) BlurProjectSpecific.py file is to blur the project specific content and convert the textual vectors (the output of ProcessRawASTs_DFT.py) to numeric vectors which can be used as the input of ML algorithms. 
+4) LSTM.py It also contains the Python code sample for implementing LSTM based on Keras with Tensorflow backend.
 
 We used [Understand](https://scitools.com/) which is a commercial code enhancement tool for extracting function-level code metrics. In CodeMetrics.xlsx file, we include 23 code metrics extracted from the vulnerable functions of 3 projects. 
 
@@ -31,5 +35,4 @@ We used [Understand](https://scitools.com/) which is a commercial code enhanceme
 
 You are welcomed to improve our code as well as our method. Please cite our paper if you use the code/data in your work. For acquiring more data or enquiries, please contact: junzhang@swin.edu.au.
 
-Thanks and enjoy coding!
-
+Thanks!
