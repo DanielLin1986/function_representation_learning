@@ -31,6 +31,12 @@ The "Code" folder contains the Python code samples.
 
 We used [Understand](https://scitools.com/) which is a commercial code enhancement tool for extracting function-level code metrics. In CodeMetrics.xlsx file, we include 23 code metrics extracted from the vulnerable functions of 3 projects. 
 
+### Possible Future Work
+
+1) In our paper, we randomly selected one code metric which was the "essential complexity" as the proxy (used as the substitute of the actual label). It will be interesting to examine whether the performance can be further improved when combining multiple code metrics, since multiple code metrics can provide more information and are more indicative of potential vulnerability (i.e. overly complex code are difficult to understand, therefore harder to debug and maintain).
+
+2) The proposed LSTM network structure is a fairly simple. We believe that the performance can be greatly improved by implementing more complex network structure. For instance, adding pooling layers and/or dropout. One can even try the attention mechanism with LSTM. 
+
 ### Contact:
 
 You are welcomed to improve our code as well as our method. Please cite our paper if you use the code/data in your work. For acquiring more data or enquiries, please contact: junzhang@swin.edu.au.
