@@ -21,7 +21,7 @@ $ bash Anaconda3-5.0.1-Linux-x86_64.sh
 
 The Vulnerabilities_info.xlsx file contains information of the collected function-level vulnerabilities. These vulnerabilities are from 3 open source projects: [FFmpeg](https://github.com/FFmpeg/FFmpeg), [LibTIFF](https://github.com/vadz/libtiff) and [LibPNG](https://github.com/glennrp/libpng). And vulnerability information was collected from [National Vulnerability Database(NVD)](https://nvd.nist.gov/) until the mid of July 2017.
 
-The "Data" folder contains the source code of vulnerable functions and vulnerable functions within the Zip file of the 3 projects. After unzipping the files, one will find that the source code of each vulnerable function was named with its CVE ID. For the non-vulnerable functions, they were named with "{filename}_{functionname}.c" format. 
+The "Data" folder contains the source code of vulnerable functions and non-vulnerable functions within the Zip file of the 3 projects. After unzipping the files, one will find that the source code of each vulnerable function was named with its CVE ID. For the non-vulnerable functions, they were named with "{filename}_{functionname}.c" format. 
 
 The "Code" folder contains the Python code samples. 
 1) ProcessCFilesWithCodeSensor.py file is for invoking the CodeSensor to parse functions to ASTs in serialized format (for detail information and usage of CodeSensor, please visit the author's blog: http://codeexploration.blogspot.com.au/ for more details). 
