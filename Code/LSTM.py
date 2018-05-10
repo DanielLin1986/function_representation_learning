@@ -3,7 +3,7 @@
 Created on Fri Aug 04 09:59:07 2017
 
 """
-
+import csv
 import numpy as np
 import pandas as pd
 import time
@@ -25,8 +25,9 @@ script_start_time = time.time()
 print ("Script starts at: " + str(script_start_time))
 
 # The a CSV file which contains the extracted AST data. (The ASTs are tokenized, namely they have been mapped to integers.) 
-
 csv_URL = 'csv data file path' # All the ASTs will be processed and converted to vectors and stored in a CSV file.
+
+working_dir = 'Save the result at this path'
 
 # The path where the trained models are saved.
 model_saved_path = '/home/daniellin/Backup/2017-08-03-ThreeProjects/models/'
@@ -66,6 +67,11 @@ def generateLabels(input_arr):
         temp_arr.append(temp_sub_arr)
     return np.asarray(temp_arr)
 
+def storeOuput(arr, path):
+    with open(path, 'w') as myfile:
+        wr = csv.writer(myfile)
+        wr.writerow(arr)
+        
 # Generate the confusion matrix.
 # def confusion_mat(test_label, predicts):         
       # precision_1, precision_0, recall_1, recall_0, f1, f0 = 0, 0, 0, 0, 0, 0    
@@ -171,50 +177,50 @@ def display_activations(activation_maps):
 # The function outputs a 3D array and store it in a txt file.
 # The arr is the array to be output.
 # The path specifies where the output file is stored.
-def storeOutput_3DArray(arr, path):
-    # Write the array to disk
-    with file(path, 'w') as outfile:
-        # I'm writing a header here just for the sake of readability
-        # Any line starting with "#" will be ignored by numpy.loadtxt
-        outfile.write('# Array shape: {0}\n'.format(arr.shape))
-    
-        # Iterating through a ndimensional array produces slices along
-        # the last axis. This is equivalent to data[i,:,:] in this case
-        for data_slice in arr:
-    
-            # The formatting string indicates that I'm writing out
-            # the values in left-justified columns 7 characters in width
-            # with 2 decimal places.  
-            np.savetxt(outfile, data_slice, fmt='%14.5f')
-    
-            # Writing out a break to indicate different slices...
-            outfile.write('# New slice\n')
+#def storeOutput_3DArray(arr, path):
+#    # Write the array to disk
+#    with file(path, 'w') as outfile:
+#        # I'm writing a header here just for the sake of readability
+#        # Any line starting with "#" will be ignored by numpy.loadtxt
+#        outfile.write('# Array shape: {0}\n'.format(arr.shape))
+#    
+#        # Iterating through a ndimensional array produces slices along
+#        # the last axis. This is equivalent to data[i,:,:] in this case
+#        for data_slice in arr:
+#    
+#            # The formatting string indicates that I'm writing out
+#            # the values in left-justified columns 7 characters in width
+#            # with 2 decimal places.  
+#            np.savetxt(outfile, data_slice, fmt='%14.5f')
+#    
+#            # Writing out a break to indicate different slices...
+#            outfile.write('# New slice\n')
 			
-def storeOutput_3DArray_str(arr, path):
-    # Write the array to disk
-    with file(path, 'w') as outfile:
-        # I'm writing a header here just for the sake of readability
-        # Any line starting with "#" will be ignored by numpy.loadtxt
-        outfile.write('# Array shape: {0}\n'.format(arr.shape))
-    
-        # Iterating through a ndimensional array produces slices along
-        # the last axis. This is equivalent to data[i,:,:] in this case
-        for data_slice in arr:
-    
-            # The formatting string indicates that I'm writing out
-            # the values in left-justified columns 7 characters in width
-            # with 2 decimal places.  
-            np.savetxt(outfile, data_slice, fmt='%s')
-    
-            # Writing out a break to indicate different slices...
-            outfile.write('# New slice\n')
+#def storeOutput_3DArray_str(arr, path):
+#    # Write the array to disk
+#    with file(path, 'w') as outfile:
+#        # I'm writing a header here just for the sake of readability
+#        # Any line starting with "#" will be ignored by numpy.loadtxt
+#        outfile.write('# Array shape: {0}\n'.format(arr.shape))
+#    
+#        # Iterating through a ndimensional array produces slices along
+#        # the last axis. This is equivalent to data[i,:,:] in this case
+#        for data_slice in arr:
+#    
+#            # The formatting string indicates that I'm writing out
+#            # the values in left-justified columns 7 characters in width
+#            # with 2 decimal places.  
+#            np.savetxt(outfile, data_slice, fmt='%s')
+#    
+#            # Writing out a break to indicate different slices...
+#            outfile.write('# New slice\n')
             
 # ------------------------------------------------------------ #
 # 1. Give the data list which stores the training and testing sets of the extracted ASTs.    
 
 data_list, data_id_list = getData(csv_URL)
 
-print (len(data_list))
+print ("The length of the data list: " + str(len(data_list)))
 
 #4775
 
@@ -242,20 +248,24 @@ print (data_id_list)
 # When the samples in the train_set_x are 
 train_set_x, test_validation_set_x, train_set_y_id, test_validation_set_y = train_test_split(sequence_pad, data_id_list, test_size=0.35, random_state=42) 
 
-print train_set_x
+print ("The training set: ")
+print (train_set_x)
 
 #print test_validation_set_x
 
-print len(train_set_x), len(train_set_y_id)
+print ("The length of training set: " + str(len(train_set_x)) + ". The length of training set id list: " +  str(len(train_set_y_id)))
 
 # Further split the data set into two parts, to form training, validation and testing parts with the ratio of 0.65:0.2:0.15 
-validation_set_x, test_set_x, validation_set_y, test_set_y = train_test_split(test_validation_set_x, test_validation_set_y, test_size=0.43, random_state=42) 
+validation_set_x, test_set_x, validation_set_id, test_set_id = train_test_split(test_validation_set_x, test_validation_set_y, test_size=0.43, random_state=42) 
 
-print validation_set_x
+print ("The validation set: ")
+print (validation_set_x)
 
-print test_set_x
+print ("The test set: ")
+print (test_set_x)
 
-print len(validation_set_x), len(test_set_x), len(validation_set_y), len(test_set_y)
+print ("The length of validation and test set: ")
+print (len(validation_set_x), len(test_set_x), len(validation_set_id), len(test_set_id))
 
 #print validation_set_x, test_set_x, validation_set_y, test_set_y
 
@@ -263,16 +273,16 @@ print len(validation_set_x), len(test_set_x), len(validation_set_y), len(test_se
 
 # The samples' ids of the train_set should be reserved, so after training we can still use the ids to identify which feature sets belong to which sample.
 train_set_y = generateLabels(train_set_y_id)
-validation_set_y = generateLabels(validation_set_y)
-test_set_y = generateLabels(test_set_y)
+validation_set_y = generateLabels(validation_set_id)
+test_set_y = generateLabels(test_set_id)
 
-print "-------------------------"
+print ("-------------------------")
 
-print "The shape of the datasets: " + "\r\n"
+print ("The shape of the datasets: " + "\r\n")
 
-print train_set_x.shape, train_set_y.shape, validation_set_x.shape, validation_set_y.shape, test_set_x.shape, test_set_y.shape
+print (train_set_x.shape, train_set_y.shape, validation_set_x.shape, validation_set_y.shape, test_set_x.shape, test_set_y.shape)
 
-print np.count_nonzero(train_set_y), np.count_nonzero(validation_set_y), np.count_nonzero(test_set_y)
+print (np.count_nonzero(train_set_y), np.count_nonzero(validation_set_y), np.count_nonzero(test_set_y))
 
 # ------------------------------------------------------------ #
 # Parameters used
@@ -293,9 +303,9 @@ model.add(Bidirectional(LSTM(64))) # Layer 2: An LSTM layer
 model.add(Dense(64, activation='tanh'))
 model.add(Dense(1, activation='sigmoid')) # Layer 3: Dense layer
 
-print "-------------------------"
+print ("-------------------------")
 
-print "strat compiling the model..."
+print ("strat compiling the model...")
 
 # ------------------------------------------------------------ #
 # 5. Configure the learning process
@@ -308,7 +318,7 @@ callbacks_list = [
         ModelCheckpoint(filepath = model_saved_path + time.strftime("%c") + '2st_64_model_{epoch:02d}_{val_loss:.3f}.h5', monitor='val_loss', verbose=2, save_best_only=True, period=1),
         EarlyStopping(monitor='val_loss', patience=20, verbose=2, mode="min")]
 
-print "start training the model..."
+print ("start training the model...")
 
 # ------------------------------------------------------------ #
 # 6. Train the model. 
@@ -330,60 +340,60 @@ output_of_layers = get_activations(model, train_set_x, print_shape_only=True)
 # If possible, visualize the outputs.
 #display_activations(output_of_layers)
 
-print "The details of the model: " + "\n\r"
+print ("The details of the model: " + "\n\r")
 
 model.summary()
 
-print "\n\r"
+print ("\n\r")
 
 # Because the model contains 4 defined layers, the output_of_layers should contain 4 sub_arrays, each of which represents a layer of output.
-print "Layer 0: " + "\n\r"
+print ("Layer 0: " + "\n\r")
 
 layer_one = output_of_layers[0]
 
 layer_one = np.asarray(layer_one)
 
-print layer_one.shape
+print (layer_one.shape)
 
-print layer_one
+print (layer_one)
 
-print "Layer 1: " + "\n\r"
+print ("Layer 1: " + "\n\r")
 
 layer_two = output_of_layers[1]
 
 layer_two = np.asarray(layer_two)
 
-print layer_two.shape
+print (layer_two.shape)
 
-print layer_two
+print (layer_two)
 
-print "Layer 2: " + "\n\r"
+print ("Layer 2: " + "\n\r")
 
 layer_three = output_of_layers[2]
 
 layer_three = np.asarray(layer_three)
 
-print layer_three.shape
+print (layer_three.shape)
 
-print layer_three
+print (layer_three)
 
-print "Layer 3: " + "\n\r"
+print ("Layer 3: " + "\n\r")
 
 layer_four = output_of_layers[3]
 
 layer_four = np.asarray(layer_four)
 
-print layer_four.shape
+print (layer_four.shape)
 
-print layer_four
+print (layer_four)
 
-print "Layer 4: " + "\n\r"
+print ("Layer 4: " + "\n\r")
 
 layer_five = output_of_layers[4]
 
 layer_five = np.asarray(layer_five)
 
-print layer_five.shape
+print (layer_five.shape)
 
 # ------------------------------------------------------------ #
 # 8. Store the output of the second last layer.
@@ -396,7 +406,7 @@ train_set_y_id = train_set_y_id.reshape(len(train_set_y_id), 1)
 
 #storeOutput_3DArray_str(train_set_y_id, "All_layers_output_ids_4.txt")
 
-print "Saving the layer outputs..."
+print ("Saving the layer outputs...")
 
 # For 3D arrays, they can only be saved in a txt file with a transformed format.
 # storeOutput_3DArray(layer_one, "layer_1_output_1.txt") # Too big...
@@ -411,12 +421,14 @@ print "Saving the layer outputs..."
 #np.savetxt("layer_4_output_4.csv", layer_four, delimiter=",")
 
 #storeOutput_3DArray(output_of_layers, "All_layers_output.txt")
-print "-----------------------------------------------"
+print ("-----------------------------------------------")
 
-print "Start predicting...."
+print ("Start predicting....")
 
+# The 0 or 1 outputs. 0 means non-vulnerable and 1 means vulnerable.
 predicted_classes = model.predict_classes(test_set_x, batch_size=BATCH_SIZE, verbose=2)
 
+predicted_prob =  model.predict(test_set_x, batch_size=BATCH_SIZE, verbose=2)
 #print "The predicted class results: \r\n"
 #print "The number of testing samples is: " + str(len(predicted_classes)) + "\r\n"
 #print predicted_classes
@@ -463,6 +475,11 @@ print (confusion_matrix(test_set_y, predicted_classes, labels=[0,1]))
 print ("\r\n")
 print ("\r\n")
 print (classification_report(test_set_y, predicted_classes, target_names=target_names))
+
+# Save the result.
+np.savetxt(working_dir + 'Result_probabilities.csv', predicted_prob, delimiter=",")
+np.savetxt(working_dir + 'test_label.csv', test_set_y, delimiter=",")
+storeOuput(test_set_id, working_dir + 'test_id.csv')
 	
 print ("\r\n")
 print ("--- %s seconds ---" + str((time.time() - script_start_time)))
